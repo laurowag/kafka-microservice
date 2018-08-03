@@ -1,4 +1,4 @@
-package br.com.laurowag;
+package br.com.laurowag.rest;
 
 import java.util.HashSet;
 import java.util.Set;

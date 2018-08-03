@@ -1,0 +1,8 @@
+swarm:
+  datasources:
+    data-sources:
+      ConexaoDS:
+        driver-name: sqlserver
+        connection-url: jdbc:sqlserver://172.17.0.1:1433;DatabaseName=rec
+        user-name: SA
+        password: lw2010@!
