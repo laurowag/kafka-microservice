@@ -25,9 +25,9 @@ public class Servico {
 	@PUT
 	public Response testePut(Cliente cliente) {
 		
-		em.createNativeQuery("EXECUTE AS login='tenant'").getSingleResult();
+		em.createNativeQuery("EXECUTE AS login='tenant'").executeUpdate();
 		em.createQuery("from cliente").getResultList();
-		em.createNativeQuery("REVERT").getSingleResult();
+		em.createNativeQuery("REVERT").executeUpdate();
 		
 		return Response.ok(cliente).build();
 	}
