@@ -3,6 +3,7 @@ package br.com.laurowag.rest;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -17,6 +18,7 @@ import br.com.laurowagnitz.model.Cliente;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
+@Transactional
 public class Servico {
 	
 	@PersistenceContext
@@ -24,11 +26,7 @@ public class Servico {
 
 	@PUT
 	public Response testePut(Cliente cliente) {
-		
-		em.createNativeQuery("EXECUTE AS login='tenant'").executeUpdate();
 		em.createQuery("from cliente").getResultList();
-		em.createNativeQuery("REVERT").executeUpdate();
-		
 		return Response.ok(cliente).build();
 	}
 	
