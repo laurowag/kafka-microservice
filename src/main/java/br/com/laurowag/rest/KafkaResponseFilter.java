@@ -29,7 +29,7 @@ public class KafkaResponseFilter implements ContainerResponseFilter {
 		System.out.println("**** CRIOU FILTER ****");
 		
 		Properties props = new Properties();
-		props.put("bootstrap.servers", "35.184.40.26:9092");
+		props.put("bootstrap.servers", "35.192.150.83:9092");
 		props.put("group.id","test");
 		props.put("enable.auto.commit","true");
 		props.put("key.serializer","org.apache.kafka.common.serialization.StringSerializer");

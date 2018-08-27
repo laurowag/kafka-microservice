@@ -1,8 +1,13 @@
 package br.com.laurowag.rest;
 
+import br.com.laurowag.multitenant.IdentiticacaoTenant;
+import br.com.laurowagnitz.model.Cliente;
+
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -12,8 +17,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import br.com.laurowagnitz.model.Cliente;
-
 @Path("servico")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -21,12 +24,17 @@ import br.com.laurowagnitz.model.Cliente;
 @Transactional
 public class Servico {
 	
-	@PersistenceContext
-	EntityManager em;
+	@PersistenceUnit
+	EntityManagerFactory emf;
+	
+	@Inject
+	IdentiticacaoTenant tenant;
 
 	@PUT
 	public Response testePut(Cliente cliente) {
-		em.createQuery("from cliente").getResultList();
+	    tenant.setTenant("tenant");
+	    EntityManager em = emf.createEntityManager();	    
+		em.createQuery("from Cliente").getResultList();
 		return Response.ok(cliente).build();
 	}
 	
