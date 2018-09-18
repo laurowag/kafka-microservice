@@ -29,16 +29,17 @@ public class Notificador {
     
     public Notificador() {
         Properties props = new Properties();
-        props.put("bootstrap.servers", "35.192.150.83:9092");
-        props.put("group.id","microservice");
+        props.put("bootstrap.servers", "10.2.136.226:9092");
+        props.put("group.id","laurowag");
         props.put("enable.auto.commit","true");
         props.put("key.deserializer","org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer","org.apache.kafka.common.serialization.ByteArrayDeserializer");
         props.put("max.partition.fetch.bytes","2097152");
-        
+        /*
         props.put("sasl.jaas.config","org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-password\";");
         props.put("security.protocol","SASL_PLAINTEXT");
         props.put("sasl.mechanism","PLAIN");
+        */
         
         System.out.println("****** VAI CONECTAR ******");
         consumer = new KafkaConsumer<String, byte[]>(props);
@@ -54,7 +55,7 @@ public class Notificador {
             thread = threadFactory.newThread(new Runnable() {
                 @Override
                 public void run() {
-                    consumer.subscribe(Arrays.asList("test"));
+                    consumer.subscribe(Arrays.asList("laurowag"));
                     int timeouts = 0;
 
                     while (true) {

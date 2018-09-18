@@ -29,17 +29,17 @@ public class KafkaResponseFilter implements ContainerResponseFilter {
 		System.out.println("**** CRIOU FILTER ****");
 		
 		Properties props = new Properties();
-		props.put("bootstrap.servers", "35.192.150.83:9092");
+		props.put("bootstrap.servers", "10.2.167.21:9092");
 		props.put("group.id","test");
 		props.put("enable.auto.commit","true");
 		props.put("key.serializer","org.apache.kafka.common.serialization.StringSerializer");
 		props.put("value.serializer","org.apache.kafka.common.serialization.ByteArraySerializer");
 		props.put("max.partition.fetch.bytes","2097152");
-		
+        /*
 		props.put("sasl.jaas.config","org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-password\";");
 		props.put("security.protocol","SASL_PLAINTEXT");
 		props.put("sasl.mechanism","PLAIN");
-		
+		*/
 		System.out.println("****** VAI CONECTAR ******");
 		producer = new KafkaProducer<>(props);
 		System.out.println("****** CONECTOU ******");
@@ -70,7 +70,7 @@ public class KafkaResponseFilter implements ContainerResponseFilter {
 		    			try {
 		    				try {
 		    					writer.write(arg1.getEntity(), EncoderFactory.get().directBinaryEncoder(out, null));
-		    					producer.send(new ProducerRecord<String, Object>("test", "cliente", out.toByteArray()));
+		    					producer.send(new ProducerRecord<String, Object>("laurowag", "cliente", out.toByteArray()));
 		    				} catch (IOException e) {
 		    					e.printStackTrace();
 		    				}				
