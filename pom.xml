@@ -145,14 +145,16 @@
 						<artifactId>docker-maven-plugin</artifactId>
 						<version>0.24.0</version>
 						<configuration>
-							<registry>${DOCKER_REGISTRY_SERVER}</registry>
+							<!-- 
+                            <registry>${DOCKER_REGISTRY_SERVER}</registry>
 							<authConfig>
 								<username>${DOCKER_REGISTRY_USER}</username>
 								<password>${DOCKER_REGISTRY_PASSWORD}</password>
 							</authConfig>
+                             -->
 							<images>
 								<image>
-									<name>${DOCKER_REGISTRY_USER}/${JOB_NAME}:${BRANCH}.${BUILD_NUMBER}</name>
+									<name>${project.artifactId}</name>
 									<run>
 										<ports>
 											<port>8080:8080</port>
@@ -174,16 +176,12 @@
 													<file>
 														<source>${project.build.directory}/microservice-swarm.jar</source>
 														<outputDirectory>app</outputDirectory>
-													</file>
-													<file>
-														<source>${project.basedir}/cacerts</source>
-														<outputDirectory>app</outputDirectory>
-													</file>
+													</file>													
 												</files>
 											</inline>
 										</assembly>
 										<entryPoint>
-											<shell>java -jar app/microservice-swarm.jar -sapp/project-defaults.yml -Dswarm.bind.address=$(hostname -I | cut -d' ' -f1) -DapplicationName=${project.artifactId}-${project.version} -Dweb.root.context=${BRANCH} -Dbuild.number=${BUILD_NUMBER}</shell>
+											<shell>java -jar app/microservice-swarm.jar -sapp/project-defaults.yml -Dswarm.bind.address=$(hostname -I | cut -d' ' -f1)</shell>
 										</entryPoint>
 									</build>
 								</image>
