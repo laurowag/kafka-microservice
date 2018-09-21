@@ -3,6 +3,6 @@ swarm:
     data-sources:
       ConexaoDS:
         driver-name: sqlserver
-        connection-url: jdbc:sqlserver://<IP SQL Server>:1433;DatabaseName=<nome database>
-        user-name: <username>
-        password: <password>
+        connection-url: jdbc:sqlserver://192.168.1.244:1433;DatabaseName=teste
+        user-name: sa
+        password:

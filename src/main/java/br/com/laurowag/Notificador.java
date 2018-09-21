@@ -1,11 +1,6 @@
 package br.com.laurowag;
 
-import br.com.laurowagnitz.model.Cliente;
-
-import org.apache.avro.Schema;
-import org.apache.avro.io.DecoderFactory;
-import org.apache.avro.reflect.ReflectData;
-import org.apache.avro.reflect.ReflectDatumReader;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -24,7 +19,7 @@ import javax.naming.NamingException;
 @Singleton
 public class Notificador {
     
-    private KafkaConsumer<String, byte[]> consumer;
+    private KafkaConsumer<String, Object> consumer;
     private Thread thread;
     
     public Notificador() {
@@ -32,9 +27,16 @@ public class Notificador {
         props.put("bootstrap.servers", "10.2.136.226:9092");
         props.put("group.id","laurowag");
         props.put("enable.auto.commit","true");
-        props.put("key.deserializer","org.apache.kafka.common.serialization.StringDeserializer");
-        props.put("value.deserializer","org.apache.kafka.common.serialization.ByteArrayDeserializer");
+        //props.put("key.deserializer","org.apache.kafka.common.serialization.StringDeserializer");
+        //props.put("value.deserializer","org.apache.kafka.common.serialization.ByteArrayDeserializer");
         props.put("max.partition.fetch.bytes","2097152");
+        
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+                        io.confluent.kafka.serializers.KafkaAvroDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+                        io.confluent.kafka.serializers.KafkaAvroDeserializer.class);
+
+        props.put("schema.registry.url", "http://10.2.141.98:8081");
         /*
         props.put("sasl.jaas.config","org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-password\";");
         props.put("security.protocol","SASL_PLAINTEXT");
@@ -42,11 +44,11 @@ public class Notificador {
         */
         
         System.out.println("****** VAI CONECTAR ******");
-        consumer = new KafkaConsumer<String, byte[]>(props);
+        consumer = new KafkaConsumer<String, Object>(props);
         System.out.println("****** CONECTOU ******");
         
-        Schema s = ReflectData.AllowNull.get().getSchema(Cliente.class);
-        ReflectDatumReader<Object> reader = new ReflectDatumReader<Object>(s);
+        //Schema s = ReflectData.AllowNull.get().getSchema(Cliente.class);
+        //ReflectDatumReader<Object> reader = new ReflectDatumReader<Object>(s);
 
         ManagedThreadFactory threadFactory;
         try {
@@ -59,18 +61,19 @@ public class Notificador {
                     int timeouts = 0;
 
                     while (true) {
-                        ConsumerRecords<String, byte[]> records = consumer.poll(200);
+                        ConsumerRecords<String, Object> records = consumer.poll(200);
                         if (records.count() == 0) {
                             timeouts++;
                         } else {
                             System.out.printf("Got %d records after %d timeouts\n", records.count(), timeouts);
                         }
 
-                        for (ConsumerRecord<String, byte[]> record: records) {
+                        for (ConsumerRecord<String, Object> record: records) {
                             try {
-                                Cliente cliente = (Cliente) reader.read(null,
-                                                    DecoderFactory.get().binaryDecoder(record.value(), null));
-                                System.out.println("BAIXOU "+cliente.getNome());
+                                //Cliente cliente = (Cliente) reader.read(null,
+                                //                    DecoderFactory.get().binaryDecoder(record.value(), null));
+                                System.out.println(record.value());
+                                System.out.println(record.value().getClass().getName());
                             } catch (Exception erro) {
                                 erro.printStackTrace();                    
                             }

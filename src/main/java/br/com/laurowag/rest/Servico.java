@@ -5,7 +5,6 @@ import br.com.laurowagnitz.model.Cliente;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.transaction.Transactional;
@@ -32,9 +31,9 @@ public class Servico {
 
 	@PUT
 	public Response testePut(Cliente cliente) {
-	    tenant.setTenant("tenant");
-	    EntityManager em = emf.createEntityManager();	    
-		em.createQuery("from Cliente").getResultList();
+	    //tenant.setTenant("tenant");
+	    //EntityManager em = emf.createEntityManager();	    
+		//em.createQuery("from Cliente").getResultList();
 		return Response.ok(cliente).build();
 	}
 	
